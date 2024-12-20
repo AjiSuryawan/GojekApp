@@ -1,6 +1,7 @@
 package com.example.gojekapp;
 
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
@@ -17,12 +18,15 @@ public class MainActivity extends AppCompatActivity {
     EditText edUsername;
     EditText edPassword;
     Button btnLogin;
+    SharedPreferences sharedPreferences;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         EdgeToEdge.enable(this);
         setContentView(R.layout.activity_main);
+        sharedPreferences = getSharedPreferences("MyPrefs", MODE_PRIVATE);
+        SharedPreferences.Editor editor = sharedPreferences.edit();
         // sambungkan objek widget ke XML nya
         edUsername = (EditText) findViewById(R.id.edUsername);
         edPassword = (EditText) findViewById(R.id.edPassword);
@@ -30,7 +34,10 @@ public class MainActivity extends AppCompatActivity {
         btnLogin.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Intent in = new Intent(MainActivity.this, ListKontakSiswa.class);
+                // save to shared preference
+                editor.putString("username", edUsername.getText().toString());
+                editor.apply();
+                Intent in = new Intent(MainActivity.this, Calculator.class);
                 startActivity(in);
             }
         });
